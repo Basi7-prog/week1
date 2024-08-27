@@ -13,10 +13,17 @@ class Stocks():
     def read_Stock_Data():
         df=pd.read_csv(r'C:\Users\Baslael\Documents\Kifiya\week1\datasets\yfinance_data\AAPL_historical_data.csv')
         return df
+    
+    #Active publishers based on frequency(above 3 percent) 
     def active_publisher(articles):
-        #Active publishers based on frequency(above 3 percent) 
         percent=pd.DataFrame()
         percent["articles published"]=articles['publisher'].value_counts()
         percent['in_percent']=((articles['publisher'].value_counts()/len(articles))*100)
         percent=percent[percent['in_percent']>=1]
         return percent
+    
+    #change date column to datetime type
+    def change_to_date(date_data):
+        date_data=pd.to_datetime(date_data, errors='coerce', format='%Y-%m-%d %H:%M:%S',utc=True)
+        date_data=pd.to_datetime(date_data).dt.strftime("%Y-%m-%d %H:%M:%S")
+        return date_data
