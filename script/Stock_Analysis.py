@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 class Stocks():
@@ -20,7 +21,19 @@ class Stocks():
         percent["articles published"]=articles['publisher'].value_counts()
         percent['in_percent']=((articles['publisher'].value_counts()/len(articles))*100)
         percent=percent[percent['in_percent']>=1]
-        return percent
+        
+        #filter only active publishers from data
+        publishers_names=percent.index
+        snt2=articles[articles['publisher'].isin(publishers_names)]
+        snt2['date']=Stocks.change_to_date(snt2['date'])
+        return [percent,snt2]
+    
+    def plot_news_frequency(data,dwm):
+        no_published_date=data.value_counts()
+        sorted_df=no_published_date.sort_index()
+        sorted_df.index=pd.to_datetime(sorted_df.index)
+
+        return sorted_df.resample(dwm).sum().plot(figsize=(40,20), kind='line')
     
     #change date column to datetime type
     def change_to_date(date_data):
