@@ -29,9 +29,9 @@ class Stocks():
         return [percent,snt2]
     
     def plot_news_frequency(data,dwm):
-        no_published_date=data.value_counts()
+        no_published_date=data.index.value_counts()
         sorted_df=no_published_date.sort_index()
-        sorted_df.index=pd.to_datetime(sorted_df.index)
+        # sorted_df.index=pd.to_datetime(sorted_df.index)
 
         return sorted_df.resample(dwm).sum().plot(figsize=(40,20), kind='line')
     
@@ -40,3 +40,10 @@ class Stocks():
         date_data=pd.to_datetime(date_data, errors='coerce', format='%Y-%m-%d %H:%M:%S',utc=True)
         date_data=pd.to_datetime(date_data).dt.strftime("%Y-%m-%d %H:%M:%S")
         return date_data
+    
+    def index_edit(data, col):
+        data[col]=Stocks.change_to_date(data[col])
+        data.set_index(col,inplace=True)
+        data.index=pd.to_datetime(data.index)
+        
+        return data
