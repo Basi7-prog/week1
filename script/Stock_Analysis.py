@@ -112,3 +112,9 @@ class Stocks():
         return plt.show()
     
     
+    def stock_movement_percental(data):
+        data['Pct_Change'] = data['Close'].pct_change() * 100
+        
+        return data
+    
+    
