@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import talib as ta
+from textblob import TextBlob
 import pynance as py
 
 
@@ -46,7 +47,21 @@ class Stocks():
         
         return data
     
+    #sentiment analysis and add polarity and subjectivity column
+    def sentiment_analysis(data):
+        polarity=[]
+        subjectivity=[]
+        for index, row in data.iterrows():
+            polarity.append(TextBlob(row["headline"]).sentiment.polarity)
+            subjectivity.append(TextBlob(row["headline"]).sentiment.subjectivity)
+            
+        data["polarity"]=polarity
+        data["subjectivity"]=subjectivity
+        
+        return data
+
     
+    #--------------------------------------------
     #Stock indicators
     def read_Stock_Data(ticker):
         qnt=py.data.get(ticker)
